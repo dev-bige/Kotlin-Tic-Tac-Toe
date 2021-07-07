@@ -1,0 +1,1 @@
+class Player constructor(val name: String?, var symbol: Char? = null)
