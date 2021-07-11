@@ -4,8 +4,9 @@ class TicTacToeBoard() {
 
     fun printBoard() {
         println()
-        for (row in board) {
-            print("\t")
+        print("\t0\t1\t2\n")
+        for ((count, row) in board.withIndex()) {
+            print(count.toString() + "\t")
             for (cord in row) {
                 print(cord + "\t")
             }
@@ -14,19 +15,25 @@ class TicTacToeBoard() {
         println()
     }
 
+    fun checkCoordinate(row: Int?, col: Int?): Boolean {
+        return board[row!!][col!!] == '.'
+    }
+
     fun setCoordinate(row: Int?, col: Int?, symbol: Char?) {
-        if (symbol == 'X') {
-            board[row!!][col!!] = 'X'
-        } else if (symbol == 'O') {
-            board[row!!][col!!] = 'O'
+        if (checkCoordinate(row, col)) {
+            if (symbol == 'X') {
+                board[row!!][col!!] = 'X'
+            } else if (symbol == 'O') {
+                board[row!!][col!!] = 'O'
+            }
         }
     }
 
-    fun checkBoard(symbolToCheck: Char?): Char? {
-        return checkRow(symbolToCheck)
+    fun checkBoard(symbolToCheck: Char?): Boolean {
+        return checkRow(symbolToCheck) || checkCol(symbolToCheck) || checkDiagonal(symbolToCheck)
     }
 
-    fun checkRow(symbolToCheck: Char?): Char? {
+    private fun checkRow(symbolToCheck: Char?): Boolean {
         var count = 0
         for (row in board) {
             for (cord in row) {
@@ -35,22 +42,24 @@ class TicTacToeBoard() {
                 }
             }
         }
-        return if (count == 3) symbolToCheck else null
+        return count == 3
     }
 
-    // TODO add logic for column check
-    fun checkCol(symbolToCheck: Char): Char {
+    // TODO fix
+    private fun checkCol(symbolToCheck: Char?): Boolean {
         var count = 0
-        for (column in 0 until board[0].size) {
-            for (row in board.indices) {
-
+        for (j in 0 until board[0].size) {
+            for (i in board.indices) {
+                if (board[i][j] == symbolToCheck) {
+                    count++
+                }
             }
         }
-        return 'z'
+        return count == 3
     }
 
-    // TODO add logic for diagonal
-    fun checkDiagonal(symbolToCheck: Char): Char {
-        return 'd'
+    private fun checkDiagonal(symbolToCheck: Char?): Boolean {
+        return (board[0][0] == symbolToCheck && board[1][1] == symbolToCheck && board[2][2] == symbolToCheck) ||
+                (board[0][2] == symbolToCheck && board[1][1] == symbolToCheck && board[0][2] == symbolToCheck)
     }
 }

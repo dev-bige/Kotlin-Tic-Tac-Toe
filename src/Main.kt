@@ -1,7 +1,7 @@
 import kotlin.random.Random
 
 /*
-Main spot to run application
+    Main spot to run application
  */
 
 private var playerOne: Player? = null
@@ -23,14 +23,14 @@ fun run() {
     var playerState: Int
     if (turn == 1) {
         playerState = 1
-        println("Player one goes first!")
-        println("Player one is X and player two is O")
+        println(playerOne!!.name + " goes first!")
+        println(playerOne!!.name + " is X and " + playerTwo!!.name + " is O")
         playerOne!!.symbol = 'X'
         playerTwo!!.symbol = 'O'
     } else {
         playerState = 2
-        println("Player two goes first!")
-        println("Player one is O and player two is X")
+        println(playerTwo!!.name + " goes first!")
+        println(playerOne!!.name + " is O and " + playerTwo!!.name + " is X")
         playerOne!!.symbol = 'O'
         playerTwo!!.symbol = 'X'
     }
@@ -40,22 +40,32 @@ fun run() {
     var moveCount = 0
 
     while (true) {
-        // TODO determine if board is filled
-        // TODO determine if player has won
         print((if (playerState == 1) playerOne!!.name else playerTwo!!.name) + " enter your coordinates (space separated): ")
         val userCoordinates = readLine()?.split(" ")?.toTypedArray()
         var win: Char? = null
         if (playerState == 1) {
-            if (userCoordinates != null) {
+            if (userCoordinates != null && ticTacToeBoard.checkCoordinate(userCoordinates[0].toIntOrNull(), userCoordinates[1].toIntOrNull())) {
                 ticTacToeBoard.setCoordinate(userCoordinates[0].toIntOrNull(), userCoordinates[1].toIntOrNull(), playerOne!!.symbol)
+            } else {
+                println("\nCoordinates have already been set, please try again!\n" )
+                ticTacToeBoard.printBoard()
+                continue
             }
-            win = ticTacToeBoard.checkBoard(playerOne!!.symbol)
+            if (ticTacToeBoard.checkBoard(playerOne!!.symbol)) {
+                win = playerOne!!.symbol
+            }
             playerState = 2
         } else if (playerState == 2) {
-            if (userCoordinates != null) {
+            if (userCoordinates != null && ticTacToeBoard.checkCoordinate(userCoordinates[0].toIntOrNull(), userCoordinates[1].toIntOrNull())) {
                 ticTacToeBoard.setCoordinate(userCoordinates[0].toIntOrNull(), userCoordinates[1].toIntOrNull(), playerTwo!!.symbol)
+            } else {
+                println("\nCoordinates have already been set, please try again!\n" )
+                ticTacToeBoard.printBoard()
+                continue
             }
-            win = ticTacToeBoard.checkBoard(playerTwo!!.symbol)
+            if (ticTacToeBoard.checkBoard(playerTwo!!.symbol)) {
+                win = playerTwo!!.symbol
+            }
             playerState = 1
         }
         moveCount++
